@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/corona10/goimagehash"
@@ -16,7 +15,7 @@ func ReadTimePositionAsJpeg(inFileName string, seconds int) io.Reader {
 	buf := bytes.NewBuffer(nil)
 	err := ffmpeg.Input(inFileName, ffmpeg.KwArgs{"ss": seconds}).
 		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
-		WithOutput(buf, os.Stdout).
+		WithOutput(buf).
 		Run()
 	if err != nil {
 		panic(err)
@@ -36,6 +35,7 @@ func RunReadTimePositionAsJpeg(inputFile string, outputFile string, second int) 
 
 	if inUnique {
 		completeFullPath := outputFile + strconv.Itoa(second) + ".jpg"
+
 		err = imaging.Save(img, completeFullPath)
 		if err != nil {
 			log.Fatal(err)

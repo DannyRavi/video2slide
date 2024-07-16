@@ -7,10 +7,11 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/hex"
-	"fmt"
 	"hash"
 	"io"
 	"os"
+
+	"github.com/sirupsen/logrus"
 )
 
 var map_hash = make(map[string]bool)
@@ -18,21 +19,22 @@ var append_hash = []string{}
 var itr int = 0
 var Reset = "\033[0m"
 var Red = "\033[31m"
-var Green = "\033[32m" 
-var Yellow = "\033[33m" 
-var Blue = "\033[34m" 
-var Magenta = "\033[35m" 
+var Green = "\033[32m"
+var Yellow = "\033[33m"
+var Blue = "\033[34m"
+var Magenta = "\033[35m"
 
-func insertHash(s string) bool {
+func insertHash(inputHash string) bool {
 
-	fmt.Println(Red + s + Reset)
-	if map_hash[s] {
+	// fmt.Println(Red + s + Reset)
+	if map_hash[inputHash] {
 		return false // Already in the map
 	}
 	if itr > 0 {
-		append_hash = append(append_hash, s)
-		map_hash[s] = true
+		append_hash = append(append_hash, inputHash)
+		map_hash[inputHash] = true
 		itr = 0
+		logrus.Info(inputHash)
 		return true
 	}
 	itr++
