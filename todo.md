@@ -1,5 +1,6 @@
 ## ToDo:
     - [ ] CI in github action
+    - [ ] use different image to pdf lib for windwos users
     - [ ] generate image should be customable 
     - [ ] reform logs
     - [ ] add test
