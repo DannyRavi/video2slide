@@ -54,3 +54,5 @@ _testmain.go
 # For example, set up .git/info/exclude or use a global .gitignore.
 
 *.pdf
+v2p
+video2slide
