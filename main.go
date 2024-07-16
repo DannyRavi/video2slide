@@ -3,14 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var flagvar int
+var ImageCouner int = 0
 
 type flags struct {
 	inputFile  string
 	outputFile string
 	time_sec   int
+	duration   int
 }
 
 var myFlag = flags{}
@@ -18,21 +22,33 @@ var myFlag = flags{}
 func init() {
 
 	flag.IntVar(&myFlag.time_sec, "s", 1, "split time per second")
-	flag.StringVar(&myFlag.inputFile, "i", "./inFile/a.webm", "please insert video ")
+	flag.StringVar(&myFlag.inputFile, "i", "./inFile/FVPHY108G.wmv", "please insert video ")
 	flag.StringVar(&myFlag.outputFile, "o", "./outFile/", "please insert output file ")
+	flag.IntVar(&myFlag.duration, "d", -1, "please insert duration of video ")
 	flag.Parse()
 	fmt.Println(myFlag.time_sec, myFlag.inputFile, myFlag.outputFile)
+	log.SetFormatter(&log.TextFormatter{
+		DisableColors: true,
+		FullTimestamp: true,
+	})
+	log.SetLevel(log.InfoLevel)
 }
 
 func main() {
 	// inputpath := "./inFile/1280.mp4"
 	// var nFlag = flag.Int("n", 1234, "help message for flag n")
 	// flag.Parse()
-	fmt.Println(myFlag.outputFile)
-	inputpath := "./inFile/a.webm"
-	outputPath := "./outFile/"
-	for i := 1; i < 10; i++ {
-		RunReadTimePositionAsJpeg(inputpath, outputPath, i)
-	}
 
+	fmt.Println(myFlag.outputFile)
+	inputpath := myFlag.inputFile
+	outputPath := myFlag.outputFile
+	_duration := myFlag.duration
+	durableAnyVideo := maxDurationPerSecond(inputpath, _duration) - 1
+	for i := 1; i < durableAnyVideo; i++ {
+		_sec := myFlag.time_sec * i
+		zeroAdder := totalDurationCalculate(inputpath, ImageCouner)
+		fmt.Println(_sec)
+		RunReadTimePositionAsJpeg(inputpath, outputPath, _sec, zeroAdder)
+	}
+	execute("img2pdf", outputPath+"/*.jpg -o out.pdf")
 }
