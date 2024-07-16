@@ -1,11 +1,21 @@
+## ToDo:
+    - [ ] reform logs
+    - [ ] add test
+    - [ ] add cuncurency
+    - [ ] create docker file
+    - [ ] run on windows machine
+    - [ ] reform backgroung algorithm
+    - [ ] algorithm selector 
 
-- [x] add hash
-- [x] add set-add for uniqe array
-- [x] detect noise
-- [x] do not add noise to image
-- [ ] use hash distance
-- [x] cli
-- [ ] image to pdf
+
+## done
+    - [x] add hash
+    - [x] add set-add for uniqe array
+    - [x] detect noise
+    - [x] do not add noise to image
+    - [ ] use hash distance
+    - [x] cli
+    - [x] image to pdf
 
 
 ref:
