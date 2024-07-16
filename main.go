@@ -22,8 +22,8 @@ var myFlag = flags{}
 func init() {
 
 	flag.IntVar(&myFlag.time_sec, "s", 1, "split time per second")
-	flag.StringVar(&myFlag.inputFile, "i", "./inFile/FVPHY108G.wmv", "please insert video ")
-	flag.StringVar(&myFlag.outputFile, "o", "./outFile/", "please insert output file ")
+	flag.StringVar(&myFlag.inputFile, "i", "./inFile/1280.mp4", "please insert video path ")
+	flag.StringVar(&myFlag.outputFile, "o", "./outFile/", "please insert output file path ")
 	flag.IntVar(&myFlag.duration, "d", -1, "please insert duration of video ")
 	flag.Parse()
 	fmt.Println(myFlag.time_sec, myFlag.inputFile, myFlag.outputFile)
@@ -43,12 +43,17 @@ func main() {
 	inputpath := myFlag.inputFile
 	outputPath := myFlag.outputFile
 	_duration := myFlag.duration
-	durableAnyVideo := maxDurationPerSecond(inputpath, _duration) - 1
+	durableAnyVideo := maxDurationPerSecond(inputpath, _duration)
 	for i := 1; i < durableAnyVideo; i++ {
 		_sec := myFlag.time_sec * i
 		zeroAdder := totalDurationCalculate(inputpath, ImageCouner)
-		fmt.Println(_sec)
+		log.Info(_sec)
+		if _sec >= durableAnyVideo {
+			break
+		}
 		RunReadTimePositionAsJpeg(inputpath, outputPath, _sec, zeroAdder)
 	}
-	execute("img2pdf", outputPath+"/*.jpg -o out.pdf")
+	execute()
+	cleanOutPut(outputPath)
+
 }

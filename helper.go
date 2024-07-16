@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
@@ -35,12 +37,26 @@ func maxDurationPerSecond(inputPath string, durable int) int {
 
 }
 
-func execute(cmd string, args string) {
-	out, err := exec.Command(cmd, args).Output()
+func execute() {
+
+	cmd, err := exec.Command("/bin/sh", "./pdf.sh").Output()
 	if err != nil {
-		fmt.Printf("%s", err)
+		fmt.Printf("error %s", err)
 	}
-	log.Info("Command Successfully Executed")
-	rec_ := string(out[:])
-	log.Info(rec_)
+	output := string(cmd)
+	log.Info(output)
+}
+
+func cleanOutPut(outPath string) {
+	// v := outPath + "*.jpg"
+	_path := outPath + "*.jpg"
+	files, err := filepath.Glob(_path)
+	if err != nil {
+		panic(err)
+	}
+	for _, f := range files {
+		if err := os.Remove(f); err != nil {
+			panic(err)
+		}
+	}
 }
