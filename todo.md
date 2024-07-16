@@ -1,5 +1,6 @@
 ## ToDo:
     - [ ] CI in github action
+    - [ ] generate image should be customable 
     - [ ] reform logs
     - [ ] add test
     - [ ] add cuncurency
