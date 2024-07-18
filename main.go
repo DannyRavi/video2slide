@@ -37,7 +37,7 @@ func init() {
 func main() {
 	// inputpath := "./inFile/1280.mp4"
 	// var nFlag = flag.Int("n", 1234, "help message for flag n")
-	// flag.Parse()
+	// flag.Parse() 
 
 	fmt.Println(myFlag.outputFile)
 	inputpath := myFlag.inputFile
@@ -51,7 +51,7 @@ func main() {
 		if _sec >= durableAnyVideo {
 			break
 		}
-		RunReadTimePositionAsJpeg(inputpath, outputPath, _sec, zeroAdder)
+		go RunReadTimePositionAsJpeg(inputpath, outputPath, _sec, zeroAdder)
 	}
 	execute()
 	cleanOutPut(outputPath)
