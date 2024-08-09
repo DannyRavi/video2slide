@@ -1,6 +1,4 @@
 ## ToDo:
-    - [ ] algorithm selector 
-    - [ ] use hash distance
     - [ ] CI in github action
     - [ ] add test
     - [ ] reform logs
@@ -13,6 +11,8 @@
 
 
 ## done
+    - [x] use hash distance
+    - [x] algorithm selector 
     - [x] add concurrency
     - [x] add hash
     - [x] add set-add for unique array
