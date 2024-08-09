@@ -53,51 +53,96 @@ func ReadFrameAsJpeg(inFileName string, frameNum int) io.Reader {
 type RunReadFrameAsJpeg struct{}
 
 func (f *RunReadFrameAsJpeg) Execute(arg flags) error {
+	//TODO - big function - break to multi smaller func
+	//TODO - some of this part is iterate - use func and be DRY
 	reader_video := ReadFrameAsJpeg(arg.inputFile, arg.second)
 	img, err := imaging.Decode(reader_video)
 	if err != nil {
 		log.Fatal(err)
 	}
-	arg.counter++
-	hash1, _ := goimagehash.AverageHash(img)
-	getHash := hash1.ToString()[2:]
-	map_keys[arg.counter] = getHash
-	inUnique := insertHash(getHash, arg.diffImage, arg.counter)
 
-	if inUnique {
-		ImageCounter++
-		completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
-		err = imaging.Save(img, completeFullPath)
-		if err != nil {
-			log.Fatal(err)
+	hash, _ := goimagehash.AverageHash(img)
+	getHash := hash.ToString()[2:]
+	if arg.second < 10 {
+		arg.hash_old = hash
+	}
+	if arg.diffImage < 1 {
+		inUnique := insertHashSimple(getHash)
+		if inUnique {
+			ImageCounter++
+			completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
+			err = imaging.Save(img, completeFullPath)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	} else {
+
+		defer handleError()
+		distance, err := hash.Distance(arg.hash_old)
+		if err == nil {
+			if distance > arg.diffImage {
+				ImageCounter++
+				completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
+				err = imaging.Save(img, completeFullPath)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
 		}
 	}
+	arg.hash_old = hash
 	return nil
+}
+
+func handleError() {
+	if r := recover(); r != nil {
+		fmt.Println("Recovering from panic:", r)
+	}
 }
 
 type RunReadTimePositionAsJpeg struct{}
 
 func (f *RunReadTimePositionAsJpeg) Execute(arg flags) error {
-
+	//TODO - big function - break to multi smaller func
+	//TODO - some of this part is iterate - use func and be DRY
 	reader_video := ReadTimePositionAsJpeg(arg.inputFile, arg.second)
 	img, err := imaging.Decode(reader_video)
 	if err != nil {
 		log.Fatal(err)
 	}
-	arg.counter++
-	hash1, _ := goimagehash.AverageHash(img)
-	getHash := hash1.ToString()[2:]
-	map_keys[arg.counter] = getHash
-	inUnique := insertHash(getHash, arg.diffImage, arg.counter)
 
-	if inUnique {
-		ImageCounter++
-		completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
-		err = imaging.Save(img, completeFullPath)
-		if err != nil {
-			log.Fatal(err)
+	hash, _ := goimagehash.AverageHash(img)
+	getHash := hash.ToString()[2:]
+	if arg.second < 10 {
+		arg.hash_old = hash
+	}
+	if arg.diffImage < 1 {
+		inUnique := insertHashSimple(getHash)
+		if inUnique {
+			ImageCounter++
+			completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
+			err = imaging.Save(img, completeFullPath)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	} else {
+		defer handleError()
+		distance, err := hash.Distance(arg.hash_old)
+		if err == nil {
+
+			if distance > arg.diffImage {
+				ImageCounter++
+				completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
+				err = imaging.Save(img, completeFullPath)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
 		}
 	}
+	arg.hash_old = hash
 	return nil
 }
 

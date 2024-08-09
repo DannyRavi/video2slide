@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/corona10/goimagehash"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -19,8 +20,8 @@ type flags struct {
 	frame_or_time bool
 	zeroAdd       string
 	parallel      bool
-	counter       uint32
 	diffImage     int
+	hash_old      *goimagehash.ImageHash
 }
 
 type holder struct {
@@ -37,7 +38,7 @@ func init() {
 
 	flag.IntVar(&myFlag.second, "s", 1, "split time per second")
 	flag.IntVar(&myFlag.frame, "f", 1, "split frame")
-	flag.IntVar(&myFlag.diffImage, "dif", 0, "difference set between 1 to 50")
+	flag.IntVar(&myFlag.diffImage, "k", 0, "difference set between 1 to 50")
 	flag.StringVar(&myFlag.inputFile, "i", "./inFile/1280.mp4", "please insert video path ")
 	flag.StringVar(&myFlag.outputFile, "o", "./outFile/", "please insert output file path ")
 	flag.IntVar(&myFlag.duration, "d", -1, "please insert duration of video ")

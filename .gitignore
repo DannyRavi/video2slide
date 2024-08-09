@@ -56,3 +56,4 @@ _testmain.go
 *.pdf
 v2p
 video2slide
+.vscode/launch.json

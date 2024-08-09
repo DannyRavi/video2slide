@@ -23,28 +23,22 @@ var Yellow = "\033[33m"
 var Blue = "\033[34m"
 var Magenta = "\033[35m"
 
-func insertHash(inputHash string, algo int, count uint32) bool {
+func insertHashSimple(inputHash string) bool {
 
 	if map_hash[inputHash] {
 		return false // Already in the map
 	}
-	if algo < 1 {
-		if theHolder.itr > theHolder.itr_ref {
-			append_hash = append(append_hash, inputHash)
-			map_hash[inputHash] = true
-			theHolder.itr = 0
-			// logrus.Info(inputHash)
-			return true
-		}
-		theHolder.itr++
-		return false
 
-	} else {
-		// TODO: incomplete - maybe wrong algorithm
-		return false
-		// old_hash := map_keys[count-1]
-
+	if theHolder.itr > theHolder.itr_ref {
+		append_hash = append(append_hash, inputHash)
+		map_hash[inputHash] = true
+		theHolder.itr = 0
+		// logrus.Info(inputHash)
+		return true
 	}
+	theHolder.itr++
+	return false
+
 }
 
 type HashInfo struct {
