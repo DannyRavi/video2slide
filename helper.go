@@ -7,12 +7,13 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 )
 
 func totalDurationCalculate(inputPath string, locImageCounter int) string {
 	_totalVideoDuration := totalDurationVideo(inputPath)
-	splitTotal := int(_totalVideoDuration / float32(myFlag.time_sec))
+	splitTotal := int(_totalVideoDuration / float32(myFlag.second))
 	lenSplitTotal := len(strconv.Itoa(splitTotal)) + 1
 	preload := len(strconv.Itoa(locImageCounter + 1))
 	updateZero := lenSplitTotal - preload
@@ -57,6 +58,32 @@ func cleanOutPut(outPath string) {
 	for _, f := range files {
 		if err := os.Remove(f); err != nil {
 			panic(err)
+		}
+	}
+}
+
+func runMode(condition bool) runnerCore {
+	if condition {
+		return &RunReadTimePositionAsJpeg{}
+	} else {
+
+		return &RunReadFrameAsJpeg{}
+	}
+
+}
+
+func runner(isParallel bool, f runnerCore, arg flags) {
+	if isParallel {
+		go func() {
+			err := f.Execute(arg)
+			if err != nil {
+				logrus.Error(err)
+			}
+		}()
+	} else {
+		err := f.Execute(arg)
+		if err != nil {
+			logrus.Error(err)
 		}
 	}
 }

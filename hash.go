@@ -10,13 +10,12 @@ import (
 	"hash"
 	"io"
 	"os"
-
-	"github.com/sirupsen/logrus"
 )
 
 var map_hash = make(map[string]bool)
+var map_keys = make(map[uint32]string)
 var append_hash = []string{}
-var itr int = 0
+
 var Reset = "\033[0m"
 var Red = "\033[31m"
 var Green = "\033[32m"
@@ -24,21 +23,28 @@ var Yellow = "\033[33m"
 var Blue = "\033[34m"
 var Magenta = "\033[35m"
 
-func insertHash(inputHash string) bool {
+func insertHash(inputHash string, algo int, count uint32) bool {
 
-	// fmt.Println(Red + s + Reset)
 	if map_hash[inputHash] {
 		return false // Already in the map
 	}
-	if itr > 0 {
-		append_hash = append(append_hash, inputHash)
-		map_hash[inputHash] = true
-		itr = 0
-		logrus.Info(inputHash)
-		return true
+	if algo < 1 {
+		if theHolder.itr > theHolder.itr_ref {
+			append_hash = append(append_hash, inputHash)
+			map_hash[inputHash] = true
+			theHolder.itr = 0
+			// logrus.Info(inputHash)
+			return true
+		}
+		theHolder.itr++
+		return false
+
+	} else {
+		// TODO: incomplete - maybe wrong algorithm
+		return false
+		// old_hash := map_keys[count-1]
+
 	}
-	itr++
-	return false
 }
 
 type HashInfo struct {
