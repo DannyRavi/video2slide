@@ -1,31 +1,31 @@
-name: Go Workflow
+name: Go
 
 on:
   push:
-    branches: [main]
+    branches: [ "main" ]
   pull_request:
-    branches: [main]
+    branches: [ "main" ]
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.20
-
-      - name: mod init
-        run: go mod init vep
-
-      - name: mod tidy
-        run: go mod tidy   
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
         
-      - name: Build
-        run: go build -v
+    - name: init
+      run: go mod init v2p ./...
 
-      - name: Test
-        run: go test -v
+    - name: tidy
+      run: go mod tidy ./...
+      
+    - name: Build
+      run: go build -v ./... 
+
+    - name: Test
+      run: go test -v ./...
