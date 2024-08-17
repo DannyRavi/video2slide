@@ -1,3 +1,6 @@
+[![Build workflow](https://img.shields.io/github/actions/workflow/status/DannyRavi/video2slide/go.yml?style=flat-square)](https://github.com//DannyRavi/DannyRavi/actions/workflows/go.yml?query=branch%3Amain)
+
+
 # this is video to slide convert
 
 this app can convert any video lecture to slide 
