@@ -20,10 +20,10 @@ jobs:
         
 
     - name: tidy
-      run: go mod tidy ./...
+      run: go mod tidy
       
     - name: Build
-      run: go build -v ./... 
+      run: go build -v 
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v
