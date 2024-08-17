@@ -45,7 +45,7 @@ func init() {
 	flag.BoolVar(&myFlag.frame_or_time, "frame", false, "false is time (second) mode - true is frame mode")
 	flag.BoolVar(&myFlag.parallel, "p", false, "run parallel")
 	flag.Parse()
-	fmt.Println(myFlag.second, myFlag.inputFile, myFlag.outputFile)
+	fmt.Println(myFlag.second, myFlag.inputFile, myFlag.outputFile, myFlag.frame_or_time)
 	log.SetFormatter(&log.TextFormatter{
 		DisableColors: true,
 		FullTimestamp: true,
@@ -54,10 +54,11 @@ func init() {
 
 	theHolder.itr = 0
 	if myFlag.frame_or_time {
-		theHolder.itr_ref = 0
+		theHolder.itr_ref = 3
 	} else {
 
-		theHolder.itr_ref = 3
+		theHolder.itr_ref = 0
+		theHolder.itr = 1
 	}
 
 }
@@ -71,7 +72,7 @@ func main() {
 	log.Println(theHolder.max_frame)
 	durableAnyVideo := maxDurationPerSecond(myFlag.inputFile, myFlag.duration)
 	theHolder.max_sec = durableAnyVideo
-	if !myFlag.frame_or_time {
+	if myFlag.frame_or_time {
 		durableAnyVideo = theHolder.max_frame
 	}
 

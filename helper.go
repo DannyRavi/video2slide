@@ -64,10 +64,10 @@ func cleanOutPut(outPath string) {
 
 func runMode(condition bool) runnerCore {
 	if condition {
-		return &RunReadTimePositionAsJpeg{}
+		return &RunReadFrameAsJpeg{}
 	} else {
 
-		return &RunReadFrameAsJpeg{}
+		return &RunReadTimePositionAsJpeg{}
 	}
 
 }

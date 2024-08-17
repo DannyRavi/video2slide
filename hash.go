@@ -29,10 +29,10 @@ func insertHashSimple(inputHash string) bool {
 		return false // Already in the map
 	}
 
-	if theHolder.itr > theHolder.itr_ref {
+	if theHolder.itr >= theHolder.itr_ref {
 		append_hash = append(append_hash, inputHash)
 		map_hash[inputHash] = true
-		theHolder.itr = 0
+		theHolder.itr = 1
 		// logrus.Info(inputHash)
 		return true
 	}

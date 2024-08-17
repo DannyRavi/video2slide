@@ -108,13 +108,14 @@ func (f *RunReadTimePositionAsJpeg) Execute(arg flags) error {
 	//TODO - some of this part is iterate - use func and be DRY
 	reader_video := ReadTimePositionAsJpeg(arg.inputFile, arg.second)
 	img, err := imaging.Decode(reader_video)
+	defer handleError()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Error("error on RunReadTimePositionAsJpeg - decode images", err)
 	}
 
 	hash, _ := goimagehash.AverageHash(img)
 	getHash := hash.ToString()[2:]
-	if arg.second < 10 {
+	if arg.second < 5 {
 		arg.hash_old = hash
 	}
 	if arg.diffImage < 1 {
@@ -124,25 +125,28 @@ func (f *RunReadTimePositionAsJpeg) Execute(arg flags) error {
 			completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
 			err = imaging.Save(img, completeFullPath)
 			if err != nil {
-				log.Fatal(err)
+				logrus.Fatal(err)
 			}
 		}
 	} else {
-		defer handleError()
 		distance, err := hash.Distance(arg.hash_old)
+		logrus.Info("iiiiiiiiiii ", distance)
+		defer handleError() //FIXME - there is bug about many panic accrued.
 		if err == nil {
-
 			if distance > arg.diffImage {
 				ImageCounter++
 				completeFullPath := arg.outputFile + arg.zeroAdd + strconv.Itoa(ImageCounter) + ".jpg"
 				err = imaging.Save(img, completeFullPath)
 				if err != nil {
-					log.Fatal(err)
+					logrus.Fatal(err)
+					logrus.Fatal("error on RunReadTimePositionAsJpeg - distance images1", err)
 				}
 			}
+		} else {
+			logrus.Fatal("error on RunReadTimePositionAsJpeg - distance images2", err)
 		}
+		arg.hash_old = hash
 	}
-	arg.hash_old = hash
 	return nil
 }
 
